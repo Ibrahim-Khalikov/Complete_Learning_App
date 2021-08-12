@@ -9,7 +9,40 @@ import Foundation
 
 class ContentModel: ObservableObject {
     
-init() {
-     
+    @Published var modules = [Model]()
+    
+    var styleData: Data?
+    
+    init() {
+        getLocalData()
+    }
+    
+    func getLocalData(){
+        
+        let jsonUrl = Bundle.main.url(forResource: "data", withExtension: "json")
+        
+        do{
+            
+            let jsonData = try Data(contentsOf: jsonUrl!)
+            
+            modules = try JSONDecoder().decode([Model].self, from: jsonData)
+            
+        }
+        catch{
+            print("could not find json find")
+        }
+        
+        let styleUrl = Bundle.main.url(forResource: "style", withExtension: "html")
+        
+        do{
+            let styledata = try Data(contentsOf: styleUrl!)
+            
+            self.styleData = styledata
+            
+        }
+        catch{
+            print("not style data")
+        }
+        
     }
 }
